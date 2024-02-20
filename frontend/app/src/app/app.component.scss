@@ -25,6 +25,7 @@ p {
 }
 
 .btn {
+  border-radius: 5px;
   background-color: #018f99; /* Green */
   border: none;
   color: white;
@@ -46,6 +47,12 @@ p {
   margin-right: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
 }
 
 .toolbar {
