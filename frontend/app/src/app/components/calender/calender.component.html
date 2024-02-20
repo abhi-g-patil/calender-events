@@ -5,8 +5,11 @@
       <h2>Today's Events ({{currentEvents.length}})</h2>
       <ul>
         <li *ngFor='let event of currentEvents()'>
-          <b>{{event.startStr}}</b>
-          <i>{{event.title}}</i>
+          <div class="">
+            <b>{{event.title}}</b> <br>
+            <i><u>{{event.startStr | date: 'M/d/yy, h:mm a' }}</u></i> To
+            <i><u>{{event.endStr | date: 'M/d/yy, h:mm a' }}</u></i>
+          </div>
         </li>
       </ul>
     </div>
