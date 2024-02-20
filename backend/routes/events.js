@@ -35,6 +35,21 @@ router.post('/add', function(req, res, next) {
     })
 })
 
+// delete event
+router.delete('/delete/(:id)', function(req, res, next) {
+
+    let id = req.params.id;
+     
+    dbConn.query('DELETE FROM events WHERE id = ' + id, function(err, result) {
+        //if(err) throw err
+        if (err) {
+            res.send({ error: err })
+        } else {
+            res.send({ success: 'successfully deleted! event ID = ' + id });
+        }
+    })
+})
+
 // display edit event page
 // router.get('/edit/(:id)', function(req, res, next) {
 
@@ -78,20 +93,23 @@ router.post('/add', function(req, res, next) {
 //         }
 //     })
 // })
-   
-// delete event
-router.delete('/delete/(:id)', function(req, res, next) {
 
-    let id = req.params.id;
-     
-    dbConn.query('DELETE FROM events WHERE id = ' + id, function(err, result) {
-        //if(err) throw err
+// display for given time range
+router.get('/get/period', function(req, res, next) {
+
+    let from = req.query.from;
+    let to = req.query.to;
+   
+    dbConn.query(`SELECT * FROM events
+                WHERE (start BETWEEN ${from} AND ${to})
+                    AND (end BETWEEN ${from} AND ${to})`, function(err, rows, fields) {
+
         if (err) {
             res.send({ error: err })
         } else {
-            res.send({ success: 'successfully deleted! event ID = ' + id });
+            res.status(200).send(rows);
         }
-    })
+    });
 })
 
 // catch 404 and forward to error handler

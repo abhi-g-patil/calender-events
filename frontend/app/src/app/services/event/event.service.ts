@@ -19,4 +19,8 @@ export class EventService {
   remove(id: string) {
     return this.httpClient.delete(`${environment.eventsBaseUrl}/delete/${id}`);
   }
+
+  eventsDateWise(fromDate: string, toDate: string) {
+    return this.httpClient.get(`${environment.eventsBaseUrl}/get/period?from='${fromDate}'&to='${toDate}'`);
+  }
 }

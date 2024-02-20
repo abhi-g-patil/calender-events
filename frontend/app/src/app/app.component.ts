@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'app';
-
+  fromDate: string = '';
+  toDate: string = '';
+  
   constructor(private eventService: EventService, private router: Router) { }
 
   ngOnInit() {
@@ -28,6 +30,23 @@ export class AppComponent {
       localStorage.setItem('token', 'secret');
       this.router.navigate(['./calendar']);
     });
-    
+  }
+
+  applyFilter() {
+    this.router.navigate(['']);
+    this.eventService.eventsDateWise(this.fromDate, this.toDate).subscribe((eventsData: any) => {
+      INITIAL_EVENTS.length = 0;
+      eventsData.map((event: any) => {   
+        let id = updateEventId(event.id);
+        INITIAL_EVENTS.push({
+          id: id,
+          title: event.title,
+          start: dateString(event.start),
+          end: dateString(event.end),
+        });
+      });
+      localStorage.setItem('token', 'secret');
+      this.router.navigate(['./calendar']);
+    });
   }
 }

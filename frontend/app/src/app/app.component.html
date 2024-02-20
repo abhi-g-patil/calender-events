@@ -13,7 +13,19 @@
 </div>
 
 <div class="content" role="main">
-
+  <div class="container" role="main">
+  <div>
+    <label for="from">Select From Date</label>
+    <input type="date" id="from" class="dates-inp" [(ngModel)]="fromDate" placeholder="From">
+  </div>
+  <div>
+    <label for="to">Select To Date</label>
+    <input type="date" id="to" class="dates-inp" [(ngModel)]="toDate" placeholder="To">
+  </div>
+  <div>
+    <button class="btn" (click)="applyFilter()">Apply</button>
+  </div>
+  </div>
 </div>
 
 <router-outlet></router-outlet>

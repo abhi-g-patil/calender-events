@@ -8,7 +8,7 @@ export function dateString(date: Date) {
   return moment(date).format('YYYY-MM-DDThh:mm:ss');
 }
 
-export const INITIAL_EVENTS: EventInput[] = [
+export let INITIAL_EVENTS: EventInput[] = [
   // {
   //   id: createEventId(),
   //   title: 'All-day event',
