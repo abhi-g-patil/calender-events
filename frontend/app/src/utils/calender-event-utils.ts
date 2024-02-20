@@ -28,6 +28,13 @@ export const INITIAL_EVENTS: EventInput[] = [
   // }
 ];
 
+export function updateEventId(id: any) {
+  if(id>eventGuid) eventGuid = id;
+  console.log(eventGuid);
+  
+  return String(id)
+}
+
 export function createEventId() {
   return String(eventGuid++);
 }

@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
+import { Component, signal, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -6,6 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { INITIAL_EVENTS, createEventId, dateString } from '../../../utils/calender-event-utils';
 import { EventService } from '../../services/event/event.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-calender',
@@ -46,25 +47,46 @@ export class CalenderComponent implements OnInit {
   constructor(private changeDetector: ChangeDetectorRef, private eventService: EventService) {
   }
 
-  ngOnInit() { }
+  async ngOnInit() { }
 
-  handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
-
+  async handleDateSelect(selectInfo: DateSelectArg) {
+    const { value: formValues } = await Swal.fire({
+      title: "Multiple inputs",
+      html: `
+        <input id="title" class="swal2-input" placeholder="Title">
+        <input type="datetime-local" id="start" class="swal2-input" placeholder="Start Date & Time">
+        <input type="datetime-local" id="end" class="swal2-input" placeholder="End Date & Time">
+      `,
+      focusConfirm: false,
+      preConfirm: () => {
+        const titleElem = document.getElementById("title") as HTMLInputElement;
+        const startElem = document.getElementById("start") as HTMLInputElement;
+        const endElem = document.getElementById("end") as HTMLInputElement;
+        return {
+          title: titleElem.value,
+          start: startElem.value,
+          end: endElem.value
+        };
+      }
+    });
+    
+    if (!formValues.title || !formValues.start || !formValues.end) {
+      return Swal.fire('All Values are required.!');
+    }
+    
     const calendarApi = selectInfo.view.calendar;
     calendarApi.unselect(); // clear date selection
 
-    if (title) {
-      let event = {
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr
-      };
-      this.eventService.add(event).subscribe((eventdata: any) => {
-        calendarApi.addEvent(event);
-      })
-    }
+    let event = {
+      id: createEventId(),
+      title: formValues.title,
+      start: formValues.start,
+      end: formValues.end
+    };
+    this.eventService.add(event).subscribe((eventdata: any) => {
+      calendarApi.addEvent(event);
+    })
+    return;
   }
 
   handleEventClick(clickInfo: EventClickArg) {
