@@ -5,9 +5,9 @@ import { AppComponent } from './app.component';
 import { authGuard } from './authguards/auth.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: AppComponent },
   { path: 'calendar', component: CalenderComponent, canActivate: [authGuard] },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({

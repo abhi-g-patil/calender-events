@@ -14,6 +14,7 @@ export class AppComponent {
   constructor(private eventService: EventService, private router: Router) { }
 
   ngOnInit() {
+    this.router.navigate(['']);
     this.eventService.getList().subscribe((eventsData: any) => {
       eventsData.map((event: any) => {   
         let id = updateEventId(event.id);
