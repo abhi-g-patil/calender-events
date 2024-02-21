@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EventService } from './services/event/event.service';
 import { INITIAL_EVENTS, dateString, updateEventId } from '../utils/calender-event-utils';
 import { Router } from '@angular/router';
+import { SocketService } from './services/socket/socket.service';
 
 @Component({
   selector: 'app-root',

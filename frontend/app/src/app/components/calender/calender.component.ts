@@ -7,6 +7,7 @@ import listPlugin from '@fullcalendar/list';
 import { INITIAL_EVENTS, createEventId, dateString } from '../../../utils/calender-event-utils';
 import { EventService } from '../../services/event/event.service';
 import Swal from 'sweetalert2';
+import { SocketService } from 'src/app/services/socket/socket.service';
 
 @Component({
   selector: 'app-calender',
@@ -44,10 +45,13 @@ export class CalenderComponent implements OnInit {
   };
   currentEvents = signal<EventApi[]>([]);
 
-  constructor(private changeDetector: ChangeDetectorRef, private eventService: EventService) {
-  }
+  constructor(private changeDetector: ChangeDetectorRef, private eventService: EventService,  private socketService: SocketService) { }
 
-  async ngOnInit() { }
+  async ngOnInit() {
+    this.socketService.getMessages().subscribe((message: any) => {
+      console.log(message);
+    });
+  }
 
   async handleDateSelect(selectInfo: DateSelectArg) {
     const { value: formValues } = await Swal.fire({

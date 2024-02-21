@@ -29,9 +29,7 @@ export let INITIAL_EVENTS: EventInput[] = [
 ];
 
 export function updateEventId(id: any) {
-  if(id>eventGuid) eventGuid = id;
-  console.log(eventGuid);
-  
+  if(id>eventGuid) eventGuid = id;  
   return String(id)
 }
 

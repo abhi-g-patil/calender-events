@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const { expressjwt } = require("express-jwt");
 
 const eventsRouter = require('./routes/events');
+const { log } = require('console');
 const app = express();
 const PORT = 3000;
 const SECRET_KEY = 'secret';
@@ -22,6 +23,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+io.on('connection', (socket) => {
+  console.log('Client Connected', socket.id);
+
+  socket.on('event', (message) => {
+    console.log(message);
+    io.emit('event', `${socket.id.substr(0, 2)}: ${message}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected!');
+  });
+});
+
 expressjwt({secret: SECRET_KEY, algorithms: ['HS256']});
 
 app.use((req, res, next) => {
@@ -31,14 +45,15 @@ app.use((req, res, next) => {
 
 app.use('/events', eventsRouter);
 
-app.get('/home', expressjwt({secret: SECRET_KEY, algorithms: ['HS256']}), (req, res) => {
-    console.log('req.auth', req.auth)
-    res.send('hello');
+app.get('/', (req, res) => {
+    res.send('Welcome to App.');
 })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  console.error('NOT FOUND', req.url);
+  res.status(404).send({ message: 'Request API not found' });
+  // next(createError(404));
 });
 
 app.listen(PORT, () => console.log('app listening on 3000...!'));
